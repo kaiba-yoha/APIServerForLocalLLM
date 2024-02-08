@@ -6,6 +6,8 @@ from urllib.parse import parse_qs, urlparse
 
 class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
 
+    def __init__(self):
+      self.llm = Llama(model_path = "../karakuri-lm-70b-chat-v0.1-q4_0.gguf", n_gpu_layers = 81)
 
     def do_POST(self):
       
@@ -24,8 +26,8 @@ class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
         name=data['name']
         instruction="<<SYS>>貴方は「都内大学生雑談グループ！」という名前のグループチャット上で複数人と会話しています。貴方のユーザーネームは{}です。以下は会話の履歴です。{}として、この会話に続くように一度だけ返答を行ってください。ただし、必ず返答は20字程度で行ってください。 <</SYS>>".format(name,name)
         attribute="[ATTR] helpfulness: 0 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 4 humor: 4 creativity: 4 [/ATTR]"
-        llm = Llama(model_path = "../karakuri-lm-70b-chat-v0.1-q4_0.gguf", n_gpu_layers = 81)
-        output = llm(" <s>[INST]"+instruction+ str(data['history']) +attribute+"[/INST]")
+        
+        output = self.llm(" <s>[INST]"+instruction+ str(data['history']) +attribute+"[/INST]")
         print(output['choices'][0]['text'])
         response["content"]=(output['choices'][0]['text'])
         self.send_response(200)
