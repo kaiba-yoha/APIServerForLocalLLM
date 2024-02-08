@@ -34,6 +34,6 @@ class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dump(response).encode())
 
 
-server_address = ('localhost', 8000)
+server_address = ('localhost', 8080)
 httpd = HTTPServer(server_address, CustomHTTPRequestHandler)
 httpd.serve_forever()
