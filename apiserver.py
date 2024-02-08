@@ -20,7 +20,7 @@ class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers['content-length'])
         
         body=self.rfile.read(content_length).decode('utf-8')
-        data=json.loads(body)
+        data=json.loads("{\"name\":\"kaiba\",\"history\":[{\"name\":\"kaiba\",\"content\":\"こんにちは\"},{\"name\":\"rico\",\"content\":\"やっほー、お昼食べた？\"}]}")
         name=data['name']
         instruction="<<SYS>>貴方は「都内大学生雑談グループ！」という名前のグループチャット上で複数人と会話しています。貴方のユーザーネームは{}です。以下は会話の履歴です。{}として、この会話に続くように一度だけ返答を行ってください。ただし、必ず返答は20字程度で行ってください。 <</SYS>>".format(name,name)
         attribute="[ATTR] helpfulness: 0 correctness: 4 coherence: 4 complexity: 4 verbosity: 4 quality: 4 toxicity: 4 humor: 4 creativity: 4 [/ATTR]"
@@ -34,6 +34,6 @@ class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dump(response).encode())
 
 
-server_address = ('localhost', 8080)
+server_address = ('localhost', 8000)
 httpd = HTTPServer(server_address, CustomHTTPRequestHandler)
 httpd.serve_forever()
