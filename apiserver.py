@@ -6,11 +6,10 @@ from urllib.parse import parse_qs, urlparse
 
 class CustomHTTPRequestHandler(BaseHTTPRequestHandler):
 
-    def __init__(self):
-      self.llm = Llama(model_path = "../karakuri-lm-70b-chat-v0.1-q4_0.gguf", n_gpu_layers = 81)
-
     def do_POST(self):
-      
+        if not hasattr(self,'llm'):
+          self.llm = Llama(model_path = "../karakuri-lm-70b-chat-v0.1-q4_0.gguf", n_gpu_layers = 81)
+
         response= dict()
         print('path = {}'.format(self.path))
 
